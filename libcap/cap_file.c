@@ -59,6 +59,13 @@ static cap_t _fcaps_load(struct vfs_cap_data *rawvfscap, cap_t result,
 	break;
 #endif
 
+#ifdef VFS_CAP_REVISION_3
+    case VFS_CAP_REVISION_3:
+	tocopy = VFS_CAP_U32_3;
+	bytes -= XATTR_CAPS_SZ_3;
+	break;
+#endif
+
     default:
 	cap_free(result);
 	result = NULL;
@@ -125,9 +132,15 @@ static int _fcaps_save(struct vfs_cap_data *rawvfscap, cap_t cap_d,
 
 #ifdef _LINUX_CAPABILITY_VERSION_3
     case _LINUX_CAPABILITY_VERSION_3:
+#ifdef VFS_CAP_REVISION_3
+	magic = VFS_CAP_REVISION_3;
+	tocopy = VFS_CAP_U32_3;
+	*bytes_p = XATTR_CAPS_SZ_3;
+#else
 	magic = VFS_CAP_REVISION_2;
 	tocopy = VFS_CAP_U32_2;
 	*bytes_p = XATTR_CAPS_SZ_2;
+#endif
 	break;
 #endif
 
