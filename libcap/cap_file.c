@@ -197,6 +197,13 @@ static int _fcaps_save(struct vfs_cap_data *rawvfscap, cap_t cap_d, int *bytes_p
 	}
     }
 
+#ifdef VFS_CAP_REVISION_3
+    /* The kernel expects the rootid to be a _le32. In case we're on a big
+     * endian machine we need to fix this up.
+     */
+    rawvfscap->rootid = FIXUP_32BITS(cap_d->rootid);
+#endif
+
     if (eff_not_zero == 0) {
 	rawvfscap->magic_etc = FIXUP_32BITS(magic);
     } else {
