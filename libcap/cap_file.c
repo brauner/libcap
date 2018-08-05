@@ -103,6 +103,13 @@ static cap_t _fcaps_load(struct vfs_cap_data *rawvfscap, cap_t result, int bytes
 	i++;
     }
 
+#ifdef VFS_CAP_REVISION_3
+    /* The kernel returns the rootid as a _le32. In case we're on a big endian
+     * machine we need to fix this up.
+     */
+    result->rootid = FIXUP_32BITS(rawvfscap->rootid);
+#endif
+
     return result;
 }
 
@@ -221,6 +228,7 @@ cap_t cap_get_fd(int fildes)
 	_cap_debug("getting fildes capabilities");
 
 	/* fill the capability sets via a system call */
+	rawvfscap.rootid = 0;
 	sizeofcaps = fgetxattr(fildes, XATTR_NAME_CAPS,
 			       &rawvfscap, sizeof(rawvfscap));
 	if (sizeofcaps < ssizeof(rawvfscap.magic_etc)) {
@@ -255,6 +263,7 @@ cap_t cap_get_file(const char *filename)
 	_cap_debug("getting filename capabilities");
 
 	/* fill the capability sets via a system call */
+	rawvfscap.rootid = 0;
 	sizeofcaps = getxattr(filename, XATTR_NAME_CAPS,
 			      &rawvfscap, sizeof(rawvfscap));
 	if (sizeofcaps < ssizeof(rawvfscap.magic_etc)) {
