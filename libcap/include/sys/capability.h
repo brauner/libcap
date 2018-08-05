@@ -82,6 +82,7 @@ extern int     cap_clear_flag(cap_t, cap_flag_t);
 /* libcap/cap_file.c */
 extern cap_t   cap_get_fd(int);
 extern cap_t   cap_get_file(const char *);
+extern uid_t   cap_get_nsowner(cap_t);
 extern int     cap_set_fd(int, cap_t);
 extern int     cap_set_file(const char *, cap_t);
 

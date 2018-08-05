@@ -278,6 +278,16 @@ cap_t cap_get_file(const char *filename)
 }
 
 /*
+ * Get rootid as seen in the current user namespace for the file capability
+ * sets.
+ */
+
+uid_t cap_get_nsowner(cap_t cap_d)
+{
+	return cap_d->rootid;
+}
+
+/*
  * Set the capabilities of an open file, as specified by its file
  * descriptor.
  */
@@ -361,6 +371,12 @@ cap_t cap_get_file(const char *filename)
 {
     errno = EINVAL;
     return NULL;
+}
+
+uid_t cap_get_nsowner(cap_t cap_d)
+{
+    errno = EINVAL;
+    return -1;
 }
 
 int cap_set_fd(int fildes, cap_t cap_d)
