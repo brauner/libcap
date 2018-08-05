@@ -118,6 +118,7 @@ struct _cap_struct {
 	struct __user_cap_data_struct set;
 	__u32 flat[NUMBER_OF_CAP_SETS];
     } u[_LIBCAP_CAPABILITY_U32S];
+    uid_t rootid;
 };
 
 /* the maximum bits supportable */
