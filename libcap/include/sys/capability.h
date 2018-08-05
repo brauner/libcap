@@ -85,6 +85,7 @@ extern cap_t   cap_get_file(const char *);
 extern uid_t   cap_get_nsowner(cap_t);
 extern int     cap_set_fd(int, cap_t);
 extern int     cap_set_file(const char *, cap_t);
+extern int     cap_set_nsowner(cap_t, uid_t);
 
 /* libcap/cap_proc.c */
 extern cap_t   cap_get_proc(void);

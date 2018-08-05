@@ -384,6 +384,16 @@ int cap_set_file(const char *filename, cap_t cap_d)
     return setxattr(filename, XATTR_NAME_CAPS, &rawvfscap, sizeofcaps, 0);
 }
 
+/*
+ * Set rootid for the file capability sets.
+ */
+
+int cap_set_nsowner(cap_t cap_d, uid_t rootid)
+{
+	cap_d->rootid = rootid;
+	return 0;
+}
+
 #else /* ie. ndef VFS_CAP_U32 */
 
 cap_t cap_get_fd(int fildes)
@@ -414,6 +424,12 @@ int cap_set_file(const char *filename, cap_t cap_d)
 {
     errno = EINVAL;
     return -1;
+}
+
+void cap_set_nsowner(cap_t cap_d, uid_t rootid)
+{
+	errno = EINVAL;
+	return -1;
 }
 
 #endif /* def VFS_CAP_U32 */
